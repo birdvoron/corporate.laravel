@@ -17,7 +17,7 @@ class AdminController extends Controller
     protected $title;
     protected $content = FALSE;
     protected $vars;
-    
+
     public function __construct()
     {
         $this->user = Auth::user();
