@@ -76,9 +76,13 @@ class ArticlesController extends AdminController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Requests\ArticleRequest $request)
     {
-        //
+        $result = $this->a_rep->addArticle($request);
+        if(is_array($result) && !empty($result['error'])) {
+            return back()->with($result);
+        }
+        return redirect('/admin')->with($result);
     }
 
     /**
@@ -98,9 +102,27 @@ class ArticlesController extends AdminController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Article $article)
     {
-        //
+        //$article = Article::where('alias',$alias);
+        if(Gate::denies('edit',new Article)){
+            abort(403);
+        }
+        $article->img = json_decode($article->img);
+       // dd($article);
+        $categories = Category::select(['title','alias','parent_id','id'])->get();
+        $list = array();
+        foreach ($categories as $category) {
+            if ($category->parent_id == 0) {
+                $list[$category->title] = array();
+            } else {
+                $list[$categories->where('id', $category->parent_id)->first()->title][$category->id] = $category->title;
+            }
+
+        }
+        $this->title = 'Редактирование материала - '. $article->title;
+        $this->content = view(env('THEME').'.admin.articles_create_content')->with(['categories' => $list, 'article'=> $article])->render();
+        return $this->renderOutput();
     }
 
     /**
@@ -110,9 +132,13 @@ class ArticlesController extends AdminController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Requests\ArticleRequest $request, Article $article)
     {
-        //
+        $result = $this->a_rep->updateArticle($request, $article);
+        if(is_array($result) && !empty($result['error'])) {
+            return back()->with($result);
+        }
+        return redirect('/admin')->with($result);
     }
 
     /**
