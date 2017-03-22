@@ -2,7 +2,9 @@
 
 namespace Corp\Providers;
 use Corp\Article;
+use Corp\Permission;
 use Corp\Policies\ArticlePolicy;
+use Corp\Policies\PermissionPolicy;
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
@@ -14,7 +16,8 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        Article::class => ArticlePolicy::class
+        Article::class => ArticlePolicy::class,
+        Permission::class => PermissionPolicy::class
     ];
 
     /**
@@ -32,6 +35,9 @@ class AuthServiceProvider extends ServiceProvider
         });
         $gate->define('VIEW_ADMIN_ARTICLES',function($user) {
             return $user->canDo('VIEW_ADMIN_ARTICLES', FALSE);
+        });
+        $gate->define('EDIT_USERS',function($user) {
+            return $user->canDo('EDIT_USERS', FALSE);
         });
     }
 }
