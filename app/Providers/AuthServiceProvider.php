@@ -7,6 +7,8 @@ use Corp\Permission;
 use Corp\Policies\ArticlePolicy;
 use Corp\Policies\MenusPolicy;
 use Corp\Policies\PermissionPolicy;
+use Corp\Policies\UserPolicy;
+use Corp\User;
 use Illuminate\Contracts\Auth\Access\Gate as GateContract;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
@@ -21,6 +23,7 @@ class AuthServiceProvider extends ServiceProvider
         Article::class => ArticlePolicy::class,
         Permission::class => PermissionPolicy::class,
         Menu::class => MenusPolicy::class,
+        User::class => UserPolicy::class,
     ];
 
     /**

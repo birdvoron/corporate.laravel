@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Corp\Http\Requests;
 use Corp\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Gate;
 use Menu;
 
 class AdminController extends Controller
@@ -42,10 +43,13 @@ class AdminController extends Controller
     
     public function getMenu() {
         return Menu::make('adminMenu',function($menu) {
-            $menu->add('Статьи',array('route'=>'admin.articles.index'));
+            if(Gate::allows('VIEW_ADMIN_ARTICLES')) {
+                $menu->add('Статьи',array('route'=>'admin.articles.index'));
+            }
+
             $menu->add('Портфолио',array('route'=>'admin.articles.index'));
             $menu->add('Меню',array('route'=>'admin.menus.index'));
-            $menu->add('Пользователи',array('route'=>'admin.articles.index'));
+            $menu->add('Пользователи',array('route'=>'admin.users.index'));
             $menu->add('Привилегии',array('route'=>'admin.permissions.index'));
         });
     }
