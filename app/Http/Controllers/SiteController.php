@@ -34,24 +34,21 @@ class SiteController extends Controller
 
         $menu = $this->m_rep->get();
         //dd($menu);
-       $mBuilder = Menu::make('MyNav',function($m) use ($menu){
+        $mBuilder = Menu::make('MyNav', function($m) use ($menu) {
 
-           foreach ($menu as $item) {
-               //echo $item->id;
-               if($item->parent == 0) {
-                   $m->add($item->title, $item->path)->id($item->id);
-               // dd($m->find($item->id));
-               }
-               else {
+            foreach($menu as $item) {
 
-                  // if($m->find($item->parent)){
-                      // dd(1);
-                       $m->blog->add($item->title, $item->path)->id($item->id);
-                 //  }
-               }
+                if($item->parent == 0) {
+                    $m->add($item->title,$item->path)->id($item->id);
+                }
+                else {
+                    if($m->find($item->parent)) {
+                        $m->find($item->parent)->add($item->title,$item->path)->id($item->id);
+                    }
+                }
+            }
 
-           }
-       });
+        });
         //dd($mBuilder);
         return $mBuilder;
     }

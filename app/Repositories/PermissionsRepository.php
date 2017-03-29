@@ -34,7 +34,8 @@ class PermissionsRepository extends Repository
             else {
                 $value->savePermissions([]);
             }
-            return TRUE;
+
         }
+        return ['status'=>'Права обновлены'];
     }
 }
